@@ -1,0 +1,21 @@
+{
+  "name": "market-crawler",
+  "version": "0.0.1",
+  "description": "Gather top market applications",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "crawler",
+    "statistics",
+    "marketplaces"
+  ],
+  "author": "Amir Yaghoobi",
+  "license": "MIT",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "nodemon": "^1.18.7",
+    "superagent": "^4.0.0"
+  }
+}
