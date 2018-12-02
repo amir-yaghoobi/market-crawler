@@ -1,7 +1,7 @@
 {
   "name": "market-crawler",
   "version": "0.0.1",
-  "description": "Gather top market applications",
+  "description": "Gather stats about top applications in cafe bazaar",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon .",
