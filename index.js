@@ -103,63 +103,63 @@ sequelize.sync()
 
       // fillNullPlaystores()
 
-      // return loadCategories()
-      //     .then(categories => {
-      //       console.log(categories)
-      //       return Promise.each(categories, category => {
-      //           console.time('processing category ' + category.name)
-      //           return getApplicationsBundleId(category)
-      //               .then(bundleIds => {
-      //                 return Promise.map(bundleIds, bundleId => {
-      //                   console.time('cafeBazaar ' + bundleId)
-      //                   return getCafeBazaarStats(bundleId)
-      //                       .then(stats => {
-      //                         console.timeEnd('cafeBazaar ' + bundleId)
-      //                         console.time('playStore ' + bundleId)
-      //
-      //                         return getPlayStoreStats(bundleId)
-      //                             .then(pass => pass)
-      //                             .catch(err => {
-      //                               if (err.status === 404) {
-      //                                 return {playStoreInstalls: -1}
-      //                               }
-      //                               if (err.code === 'ECONNRESET') {
-      //                                 console.error('reached to playStore limitation for bundleId', bundleId)
-      //                                 return {playStoreInstalls: -100}
-      //                               }
-      //                               console.error('playStore error', err)
-      //                             })
-      //                             .then(({playStoreInstalls}) => {
-      //                               console.timeEnd('playStore ' + bundleId)
-      //                               const {appName, category, cafeBazaarInstalls, cafeBazaarPrice} = stats
-      //                               stats.bundleId = bundleId
-      //                               stats.playStoreInstalls = playStoreInstalls
-      //
-      //                               // console.log('updating bundleId: %s, cafeBazaarInstalls: %s, playStoreInstalls: %s',
-      //                               //     bundleId, cafeBazaarInstalls, playStoreInstalls)
-      //
-      //                               Application
-      //                                   .upsert({
-      //                                     bundleId,
-      //                                     appName,
-      //                                     category,
-      //                                     cafeBazaarInstalls,
-      //                                     cafeBazaarPrice,
-      //                                     playStoreInstalls
-      //                                   })
-      //                                   .then(_ => {
-      //
-      //                                   })
-      //                               return stats
-      //                             })
-      //                       })
-      //                 })
-      //               })
-      //               .catch(err => {
-      //                 console.error('cannot get applications of this category', category)
-      //               }).then(_ => console.timeEnd('processing category ' + category.name))
-      //       })
-      //     })
+      return loadCategories()
+          .then(categories => {
+            console.log(categories)
+            return Promise.each(categories, category => {
+                console.time('processing category ' + category.name)
+                return getApplicationsBundleId(category)
+                    .then(bundleIds => {
+                      return Promise.map(bundleIds, bundleId => {
+                        console.time('cafeBazaar ' + bundleId)
+                        return getCafeBazaarStats(bundleId)
+                            .then(stats => {
+                              console.timeEnd('cafeBazaar ' + bundleId)
+                              console.time('playStore ' + bundleId)
+
+                              return getPlayStoreStats(bundleId)
+                                  .then(pass => pass)
+                                  .catch(err => {
+                                    if (err.status === 404) {
+                                      return {playStoreInstalls: -1}
+                                    }
+                                    if (err.code === 'ECONNRESET') {
+                                      console.error('reached to playStore limitation for bundleId', bundleId)
+                                      return {playStoreInstalls: -100}
+                                    }
+                                    console.error('playStore error', err)
+                                  })
+                                  .then(({playStoreInstalls}) => {
+                                    console.timeEnd('playStore ' + bundleId)
+                                    const {appName, category, cafeBazaarInstalls, cafeBazaarPrice} = stats
+                                    stats.bundleId = bundleId
+                                    stats.playStoreInstalls = playStoreInstalls
+
+                                    // console.log('updating bundleId: %s, cafeBazaarInstalls: %s, playStoreInstalls: %s',
+                                    //     bundleId, cafeBazaarInstalls, playStoreInstalls)
+
+                                    Application
+                                        .upsert({
+                                          bundleId,
+                                          appName,
+                                          category,
+                                          cafeBazaarInstalls,
+                                          cafeBazaarPrice,
+                                          playStoreInstalls
+                                        })
+                                        .then(_ => {
+
+                                        })
+                                    return stats
+                                  })
+                            })
+                      })
+                    })
+                    .catch(err => {
+                      console.error('cannot get applications of this category', category)
+                    }).then(_ => console.timeEnd('processing category ' + category.name))
+            })
+          })
     })
 
 
@@ -312,6 +312,7 @@ app.get('/search/:query', function(req, res) {
                         const {appName, category, cafeBazaarInstalls, cafeBazaarPrice} = stats
                         stats.bundleId = bundleId
                         stats.playStoreInstalls = playStoreInstalls
+                        stats.playStorePrice = playStorePrice
 
                         console.log('updating bundleId: %s, appName: %s, category: %s, cafeBazaarInstalls: %s, cafeBazaarPrice: %s, playStoreInstalls: %s',
                             bundleId, appName, category, cafeBazaarInstalls, cafeBazaarPrice, playStoreInstalls)
